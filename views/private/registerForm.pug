@@ -1,0 +1,9 @@
+extends ./base.pug
+
+block content
+  h3 #{action} Register a device
+    form(action="/private/device/register" method="POST")
+      .form-group
+        label(for="deviceName") Enter the full device Id
+        input.form-control(type="text", name="deviceId" required, id="deviceId", value=device.deviceId)
+      button.btn.btn-success(type="submit") Save 

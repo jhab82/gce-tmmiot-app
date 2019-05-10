@@ -1,0 +1,6 @@
+indexes:
+- kind: tmmiot_datastore_2
+  properties:
+  - name: id
+  - name: time
+    direction: desc

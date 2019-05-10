@@ -1,0 +1,4 @@
+cron:
+- description: "delete every 7 days data which is older then 7 days"
+  url: /tasks/sevenDaysDelete
+  schedule: every 7 days

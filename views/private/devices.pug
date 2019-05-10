@@ -1,0 +1,24 @@
+
+extends ./base.pug
+
+block content 
+  h3 List of registered devices
+    
+  each device in devices
+    .media
+      span #{device.deviceId}
+      a(href=`/private/device/list/${device.deviceId}`)
+        span  
+        i.glyphicon.glyphicon-star
+      a(href=`/private/device/chart/${device.deviceId}`)
+        span  
+        i.glyphicon.glyphicon-signal
+        
+  if !devices.length
+    p No Devices found.
+
+  if nextPageToken
+    nav
+      ul.pager
+        li
+          a(href=`?title=${title}&partType=${partType}&pageToken=${encodeURIComponent(nextPageToken)}`) More

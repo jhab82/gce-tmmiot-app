@@ -1,0 +1,34 @@
+extends ./base.pug
+
+block content
+  h3 Chart
+  script(type='text/javascript').
+        google.charts.load('current', {'packages':['corechart'], callback: drawChart});
+
+        var measurements = !{measurements};
+
+        function drawChart() {
+                var dataLine = new google.visualization.DataTable();
+                dataLine.addColumn('datetime', 'Date');
+                dataLine.addColumn('number', 'Temp');
+                dataLine.addColumn('number', 'Humidity');
+                dataLine.addColumn('number', 'pm2p5');
+                dataLine.addColumn('number', 'pm10');   
+
+                for (var i = 0; i < measurements.length; i++) {
+                    var d = new Date();
+                    d.setTime(measurements[i].time);
+                    dataLine.addRow([d, parseFloat(measurements[i].Temp), parseFloat(measurements[i].Hum), parseFloat(measurements[i].pm2p5), parseFloat(measurements[i].pm10)]);
+                }
+
+                var chartLine = new google.visualization.LineChart(document.getElementById('div_LineChart'));
+                chartLine.draw(dataLine, { width: '800', height: '600', legend: {position: 'top'}});
+            }
+
+  #div_LineChart
+
+  if nextPageToken
+    nav
+      ul.pager
+        li
+          a(href=`?&pageToken=${encodeURIComponent(nextPageToken)}`) More
