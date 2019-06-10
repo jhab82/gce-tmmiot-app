@@ -4,3 +4,9 @@ indexes:
   - name: id
   - name: time
     direction: desc
+
+- kind: tmmiot_datastore_2
+  properties:
+    - name: time
+    - name: __key__
+

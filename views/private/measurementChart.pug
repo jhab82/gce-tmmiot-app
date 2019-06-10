@@ -1,12 +1,10 @@
 extends ./base.pug
 
 block content
-  h3 Chart
+  h3 Chart from #{deviceId}
   script(type='text/javascript').
         google.charts.load('current', {'packages':['corechart'], callback: drawChart});
-
         var measurements = !{measurements};
-
         function drawChart() {
                 var dataLine = new google.visualization.DataTable();
                 dataLine.addColumn('datetime', 'Date');
@@ -22,10 +20,13 @@ block content
                 }
 
                 var chartLine = new google.visualization.LineChart(document.getElementById('div_LineChart'));
-                chartLine.draw(dataLine, { width: '800', height: '600', legend: {position: 'top'}});
+                chartLine.draw(dataLine, { width: '400', height: '600', legend: {position: 'top'}});
             }
 
-  #div_LineChart
+  if measurements.length < 3
+    p No measurements found. 
+  else
+    #div_LineChart
 
   if nextPageToken
     nav

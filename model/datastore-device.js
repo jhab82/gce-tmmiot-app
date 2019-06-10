@@ -6,7 +6,6 @@ const kind_data = 'tmmiot_datastore_2';
 
 const kind_device = 'tmmiot_devices';
 
-
 // Translates from Datastore's entity format to
 // the format expected by the application.
 //
@@ -154,9 +153,45 @@ function registerDeviceForUser(id, data, queuePart, cb) {
   });
 }
 
+function _delete(id, cb) {
+  const key = ds.key([kind_data, parseInt(id, 10)]);
+  /** TODO: only allow deleting parts with no children */
+  ds.delete(key, cb);
+}
+
+function deleteAllOldData(option, cb) {
+    time7Days = Math.floor(new Date() ) - 3*86400*1000;
+    console.log("time7Days: " + time7Days)
+
+    const q = ds
+    .createQuery([kind_data])
+    .filter('time', '<', time7Days)
+    .select('__key__');
+
+  ds.runQuery(q, (err, entities) => {
+    if (err) {
+      cb(err);
+      return;
+    } else {
+        for (i in entities) {
+          //console.log("entity: "+ JSON.stringify(entities[i][ds.KEY]['id']));
+          _delete(entities[i][ds.KEY]['id'], (err, success) => {
+              if(err) {}
+              else {
+                  
+              }
+          });
+        }
+        cb(null, "done")
+    }
+  });
+}
+
+
 module.exports = {
     listDataByDeviceId: listDataByDeviceId,
     listRegisteredDevices: listRegisteredDevices,
     isDeviceIdRegistered: isDeviceIdRegistered,
     registerDeviceForUser: registerDeviceForUser,
+    deleteAllOldData: deleteAllOldData,
 };
