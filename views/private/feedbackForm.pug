@@ -1,0 +1,9 @@
+extends ./base.pug
+
+block content
+  h3 #{action} for device #{deviceId} on date #{date}
+    form(action="/private/device/feedback" method="POST")
+      .form-group
+        label(for="deviceName") Enter your feedback
+        input.form-control(type="text", name="deviceId" required, id="deviceId", value=device.deviceId)
+      button.btn.btn-success(type="submit") Feedback
