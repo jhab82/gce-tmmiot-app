@@ -2,6 +2,13 @@ extends ./base.pug
 
 block content
   h3 Chart from #{deviceId}
+  p 
+    button.js-push-btn.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect(disabled='')
+      | Enable Push Messaging
+    //pre.code.js-subscription-json
+  script(src='https://code.getmdl.io/1.2.1/material.min.js')
+  script(src='/scripts/push-main.js')
+  
   script(type='text/javascript').
         google.charts.load('current', {'packages':['corechart'], callback: drawChart});
         var measurements = !{measurements};

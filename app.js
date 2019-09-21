@@ -48,6 +48,8 @@ app.get('/', (req, res) => {
   res.redirect('/private/device');
 });
 
+app.use(express.static(__dirname + '/public'));
+
 // Add the error logger after all middleware and routes so that
 // it can log errors from the whole application. Any custom error
 // handlers should go after this.

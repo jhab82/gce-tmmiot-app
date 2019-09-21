@@ -119,6 +119,44 @@ router.post('/register', oauth2.required, (req, res) => {
     });
 });
 
+//Web-Push: Subscription. Route for saving the notification for a specific device (user). At the moment
+//  only one person can register a device. Which means only one subscription per device
+router.post('/subscribe', oauth2.required, (req, res) => {
+    const data = req.body;
+    console.log("data.deviceId: " + JSON.stringify(data.deviceId));
+    console.log("data.subscription:"+JSON.stringify(data.subscription));
+
+    getModelDevice().isDeviceIdRegistered(data.deviceId, (err, device) => {
+        if (err) { console.log("err: " + err) }
+        else if (device[0].userId == req.user.id) {
+            data.userId = req.user.id;
+            getModelDevice().registerDeviceForUser(device[0].id, data, false,  (err, registeredDevice) => {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                    res.redirect(`${req.baseUrl}/chart/${registeredDevice.deviceId}`);
+                });
+        } else {
+            res.redirect(`${req.baseUrl}`);
+        }
+    });
+    
+});
+
+router.get('/feedback/:deviceId', oauth2.required, (req, res) => {
+    console.log("date: "+req.query.date);
+    console.log("deviceId: " +req.params.deviceId);
+    res.render('private/feedbackForm.pug', {
+        device : {"deviceId": req.params.deviceId},
+        deviceId : req.params.deviceId,
+        date : req.query.date,
+        action: 'Feedback',
+    });
+});
+
+
+
 //this is the route for the 7 day delete cron job
 
 router.get('/deleteAllOldData123456789', (req, res, next) => {
@@ -131,6 +169,9 @@ router.get('/deleteAllOldData123456789', (req, res, next) => {
       });
 });
 
+router.get('/push',  (req, res) => {
+    res.render('push-index.pug');
+});
 
 
 /**
